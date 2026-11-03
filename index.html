@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Plain-language Nigerian SME tax guidance with a compliance checker, deadline countdown and starter checklist.">
+<title>Bridge Tax Connect</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one calm column of sections under a hero that shows the gap between SMEs and the tax office being bridged. */
+:root {
+  --bg: #F1F5F2;
+  --surface: #FFFFFF;
+  --ink: #10231B;
+  --muted: #475C52;
+  --line: #D3DED7;
+  --accent: #0A6B49;
+  --accent-ink: #FFFFFF;
+  --signal: #E3A008;
+  --signal-soft: #FBEFC9;
+  --signal-ink: #5A3F00;
+  --warn: #B4540A;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0C1814;
+    --surface: #13241D;
+    --ink: #E6EFEA;
+    --muted: #9DB2A7;
+    --line: #25392F;
+    --accent: #3DC48D;
+    --accent-ink: #06150F;
+    --signal: #F0B73A;
+    --signal-soft: #3A2E0E;
+    --signal-ink: #F6D98A;
+    --warn: #F08A3C;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0C1814;
+  --surface: #13241D;
+  --ink: #E6EFEA;
+  --muted: #9DB2A7;
+  --line: #25392F;
+  --accent: #3DC48D;
+  --accent-ink: #06150F;
+  --signal: #F0B73A;
+  --signal-soft: #3A2E0E;
+  --signal-ink: #F6D98A;
+  --warn: #F08A3C;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  padding-block: 20px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 72px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; line-height: 1.1; margin: 0; }
+h2 { font-size: clamp(1.7rem, 4.5vw, 2.4rem); font-weight: 800; letter-spacing: -0.01em; }
+h3 { font-size: 1.15rem; font-weight: 600; }
+p { margin: 0; }
+a { color: var(--accent); }
+:focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; border-radius: 4px; }
+.label { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.lede { color: var(--muted); max-width: 62ch; font-size: 1.05rem; }
+.sec-head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+
+/* Top bar and nav */
+.top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; }
+.brand { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; display: flex; align-items: center; gap: 10px; }
+.brand svg { width: 28px; height: 28px; flex: none; }
+nav { display: flex; flex-wrap: wrap; gap: 4px 18px; }
+nav a { color: var(--muted); text-decoration: none; font-size: 0.92rem; font-weight: 500; padding: 4px 0; border-bottom: 2px solid transparent; }
+nav a:hover { color: var(--ink); border-bottom-color: var(--signal); }
+
+/* Hero */
+.hero { display: grid; gap: 32px; padding-top: 28px; }
+.hero h1 { font-size: clamp(2.6rem, 9vw, 5rem); font-weight: 800; letter-spacing: -0.02em; }
+.hero h1 span { color: var(--accent); }
+.hero .lede { font-size: 1.2rem; max-width: 52ch; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn { display: inline-flex; align-items: center; min-height: 46px; padding: 0 22px; border-radius: 6px; font-weight: 600; text-decoration: none; font-size: 1rem; border: 2px solid var(--accent); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); }
+.btn.ghost { color: var(--accent); background: transparent; }
+.btn:hover { filter: brightness(1.08); }
+.bridge { width: 100%; max-width: 100%; height: auto; display: block; }
+.bridge .bank { fill: var(--accent); }
+.bridge .deck { stroke: var(--ink); stroke-width: 3; fill: none; }
+.bridge .cable { stroke: var(--signal); stroke-width: 3; fill: none; }
+.bridge .post { stroke: var(--ink); stroke-width: 2; }
+.bridge .gap { stroke: var(--muted); stroke-width: 2; stroke-dasharray: 5 6; fill: none; }
+.bridge text { font-family: var(--font-mono); font-size: 12px; fill: var(--ink); letter-spacing: 0.04em; }
+.bridge .on-bank { fill: var(--accent-ink); font-weight: 500; }
+
+/* Problem */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.panel.solution { border-color: var(--accent); }
+.panel ul { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: 6px; color: var(--muted); }
+
+/* SME illustrations */
+.gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
+.gallery figure { margin: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.gallery svg { width: 100%; max-width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 10px; }
+.gallery figcaption { font-weight: 600; font-size: 0.95rem; }
+.s-bg { fill: var(--signal-soft); }
+.s-floor { fill: var(--ink); opacity: 0.12; }
+.s-acc { fill: var(--accent); }
+.s-sig { fill: var(--signal); }
+.s-ink { fill: var(--ink); }
+.s-warn { fill: var(--warn); }
+.s-sur { fill: var(--surface); }
+.s-line { stroke: var(--ink); stroke-width: 2; fill: none; }
+.il-text { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.1em; fill: var(--accent-ink); }
+.il-garage { fill: var(--bg); }
+
+/* Hub cards */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.tax-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.tax-card header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.rate { font-family: var(--font-mono); font-weight: 500; color: var(--accent); white-space: nowrap; font-size: 0.95rem; }
+.tax-card dl { margin: 0; display: grid; grid-template-columns: 5.5rem 1fr; gap: 8px 12px; font-size: 0.93rem; }
+.tax-card dt { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding-top: 3px; }
+.tax-card dd { margin: 0; min-width: 0; }
+.table-scroll { overflow-x: auto; margin-top: 24px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 0.93rem; }
+th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 500; }
+tr:last-child td { border-bottom: 0; }
+td.amount { font-family: var(--font-mono); white-space: nowrap; }
+.note { font-size: 0.85rem; color: var(--muted); margin-top: 12px; }
+
+/* Checker */
+.checker { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 20px; align-items: start; }
+.form { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 18px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-weight: 600; font-size: 0.93rem; }
+.field small { color: var(--muted); font-size: 0.8rem; }
+select, input[type="number"] {
+  font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line);
+  border-radius: 6px; min-height: 46px; padding: 0 12px; width: 100%;
+}
+.money { display: flex; align-items: center; gap: 8px; }
+.money span { font-family: var(--font-mono); color: var(--muted); }
+.result { background: var(--surface); border: 2px solid var(--accent); border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.result.alert { border-color: var(--warn); }
+.pill { align-self: flex-start; font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; background: var(--accent); color: var(--accent-ink); padding: 4px 10px; border-radius: 999px; }
+.result.alert .pill { background: var(--warn); color: #fff; }
+.result h3 { font-size: 1.5rem; }
+.sample { background: var(--signal-soft); color: var(--signal-ink); font-size: 0.85rem; padding: 8px 12px; border-radius: 6px; }
+.obl { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.obl li { display: grid; grid-template-columns: 6.5rem 1fr; gap: 12px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 0.95rem; }
+.tag { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; padding-top: 3px; color: var(--accent); }
+.tag.must { color: var(--warn); }
+.tag.free { color: var(--accent); }
+.watch { background: var(--signal-soft); color: var(--signal-ink); padding: 10px 14px; border-radius: 6px; font-size: 0.9rem; }
+
+/* Calendar */
+.cal { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.next { background: var(--accent); color: var(--accent-ink); border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 8px; }
+.next .big { font-family: var(--font-display); font-weight: 800; font-size: clamp(2rem, 7vw, 3rem); line-height: 1; }
+.next .label { color: inherit; opacity: 0.85; }
+.sched { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+.sched li { display: grid; grid-template-columns: 5.5rem 1fr; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--line); font-size: 0.93rem; }
+.sched li:last-child { border-bottom: 0; }
+.sched .when { font-family: var(--font-mono); font-weight: 500; color: var(--accent); }
+.annual { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 14px; margin-top: 16px; }
+.annual-out { font-family: var(--font-display); font-weight: 600; font-size: 1.3rem; }
+
+/* Resources */
+.res { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.check { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.check li { border-bottom: 1px solid var(--line); }
+.check li:last-child { border-bottom: 0; }
+.check label { display: flex; gap: 12px; padding: 12px 0; cursor: pointer; align-items: flex-start; }
+.check input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--accent); flex: none; }
+.bar { height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; }
+.bar > i { display: block; height: 100%; width: 0; background: var(--accent); transition: width 0.2s; }
+details { border-bottom: 1px solid var(--line); padding: 14px 0; }
+details:first-of-type { border-top: 1px solid var(--line); }
+summary { cursor: pointer; font-weight: 600; list-style-position: outside; }
+details p { color: var(--muted); margin-top: 10px; max-width: 60ch; }
+
+/* About */
+.about { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 28px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; }
+.about > div { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.contact { margin: 0; display: grid; grid-template-columns: 5rem 1fr; gap: 10px 12px; align-items: baseline; }
+.contact dt { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.contact dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+#mail { user-select: all; font-family: var(--font-mono); font-size: 0.95rem; }
+.copy { font: inherit; font-size: 0.8rem; font-weight: 600; color: var(--accent); background: transparent; border: 1.5px solid var(--accent); border-radius: 6px; min-height: 32px; padding: 0 12px; margin-left: 6px; cursor: pointer; }
+.copy:hover { background: var(--accent); color: var(--accent-ink); }
+footer { color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--line); padding-top: 20px; max-width: 80ch; }
+
+@media (max-width: 760px) {
+  .split, .checker, .res, .about { grid-template-columns: 1fr; }
+  .wrap { gap: 56px; }
+  .obl li, .sched li { grid-template-columns: 1fr; gap: 2px; }
+  .tax-card dl { grid-template-columns: 1fr; gap: 2px; }
+  .tax-card dd { margin-bottom: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .bar > i { transition: none; }
+}
+body { margin: 0; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <svg viewBox="0 0 28 28" aria-hidden="true"><rect x="0" y="16" width="6" height="12" fill="var(--accent)"/><rect x="22" y="16" width="6" height="12" fill="var(--accent)"/><path d="M0 16 H28" stroke="var(--ink)" stroke-width="2.5"/><path d="M3 16 Q14 0 25 16" stroke="var(--signal)" stroke-width="2.5" fill="none"/></svg>
+      Bridge Tax Connect
+    </div>
+    <nav aria-label="Sections">
+      <a href="#problem">Why it matters</a>
+      <a href="#smes">Who it is for</a>
+      <a href="#hub">Awareness hub</a>
+      <a href="#checker">Compliance checker</a>
+      <a href="#calendar">Deadlines</a>
+      <a href="#resources">Resources</a>
+      <a href="#about">About</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <p class="label">Tax awareness for Nigerian SMEs</p>
+      <h1>Know what you owe. <span>File on time.</span> Keep your relief.</h1>
+      <p class="lede">Bridge Tax Connect explains the 2026 tax rules in plain language, tells your business which taxes apply, and counts down to your filing dates.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="#checker">Check my business</a>
+        <a class="btn ghost" href="#calendar">See deadlines</a>
+      </div>
+    </div>
+    <svg class="bridge" viewBox="0 0 640 190" role="img" aria-label="A bridge connecting small businesses on the left bank to the tax authority on the right bank">
+      <rect class="bank" x="0" y="110" width="150" height="80"/>
+      <rect class="bank" x="490" y="110" width="150" height="80"/>
+      <text class="on-bank" x="14" y="150">SMALL</text>
+      <text class="on-bank" x="14" y="168">BUSINESSES</text>
+      <text class="on-bank" x="504" y="150">NRS AND STATE</text>
+      <text class="on-bank" x="504" y="168">TAX OFFICES</text>
+      <path class="gap" d="M150 150 H490"/>
+      <path class="deck" d="M150 110 H490"/>
+      <path class="cable" d="M150 110 Q320 -30 490 110"/>
+      <line class="post" x1="210" y1="110" x2="210" y2="62"/>
+      <line class="post" x1="270" y1="110" x2="270" y2="38"/>
+      <line class="post" x1="320" y1="110" x2="320" y2="32"/>
+      <line class="post" x1="370" y1="110" x2="370" y2="38"/>
+      <line class="post" x1="430" y1="110" x2="430" y2="62"/>
+      <text x="196" y="138">AWARENESS</text>
+      <text x="326" y="138">VOLUNTARY COMPLIANCE</text>
+    </svg>
+  </section>
+
+  <section id="problem">
+    <div class="sec-head">
+      <p class="label">The gap</p>
+      <h2>Small businesses want to comply. Few know how.</h2>
+    </div>
+    <div class="split">
+      <div class="panel">
+        <h3>The problem</h3>
+        <ul>
+          <li>Many owners are unsure which taxes apply to them.</li>
+          <li>Filing dates and penalties are hard to find in one place.</li>
+          <li>The new 0% rate for small companies is often read as "no filing needed". It is not.</li>
+        </ul>
+      </div>
+      <div class="panel solution">
+        <h3>What Bridge Tax Connect does</h3>
+        <ul>
+          <li>Explains each tax in plain language.</li>
+          <li>Tells you which obligations apply to your business.</li>
+          <li>Shows the next due date and what a missed filing costs.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="smes">
+    <div class="sec-head">
+      <p class="label">Who it is for</p>
+      <h2>Built for businesses like these</h2>
+      <p class="lede">Tailors, traders, bakers and mechanics run on thin margins and long days. They need tax rules that fit on one screen.</p>
+    </div>
+    <div class="gallery">
+      <figure>
+        <svg viewBox="0 0 240 160" role="img" aria-label="Illustration of a tailor's workshop with garments on a rail and a sewing machine on a table">
+          <rect class="s-bg" width="240" height="160"/>
+          <rect class="s-floor" x="0" y="140" width="240" height="20"/>
+          <line class="s-line" x1="20" y1="28" x2="130" y2="28"/>
+          <path class="s-line" d="M42 28 v8 M34 44 L42 36 L50 44"/>
+          <path class="s-acc" d="M34 44 H50 L56 80 H28 Z"/>
+          <path class="s-line" d="M82 28 v8 M74 44 L82 36 L90 44"/>
+          <path class="s-warn" d="M74 44 H90 L97 84 H67 Z"/>
+          <rect class="s-ink" x="24" y="112" width="192" height="8"/>
+          <rect class="s-ink" x="36" y="120" width="6" height="22"/>
+          <rect class="s-ink" x="198" y="120" width="6" height="22"/>
+          <rect class="s-sig" x="38" y="96" width="44" height="16" rx="8"/>
+          <rect class="s-acc" x="122" y="92" width="66" height="20" rx="3"/>
+          <rect class="s-acc" x="122" y="76" width="46" height="16" rx="3"/>
+          <rect class="s-acc" x="158" y="76" width="10" height="28"/>
+          <line class="s-line" x1="163" y1="104" x2="163" y2="112"/>
+          <circle class="s-sur" cx="196" cy="94" r="10"/>
+          <circle class="s-line" cx="196" cy="94" r="10"/>
+        </svg>
+        <figcaption>Tailors and fashion</figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 240 160" role="img" aria-label="Illustration of a market stall with a canopy and tables of tomatoes, oranges and greens">
+          <rect class="s-bg" width="240" height="160"/>
+          <rect class="s-floor" x="0" y="140" width="240" height="20"/>
+          <line class="s-line" x1="34" y1="66" x2="34" y2="142"/>
+          <line class="s-line" x1="206" y1="66" x2="206" y2="142"/>
+          <path class="s-acc" d="M14 66 Q120 6 226 66 Z"/>
+          <circle class="s-sig" cx="34" cy="66" r="14"/>
+          <circle class="s-sig" cx="94" cy="66" r="14"/>
+          <circle class="s-sig" cx="154" cy="66" r="14"/>
+          <circle class="s-sig" cx="214" cy="66" r="12"/>
+          <rect class="s-ink" x="24" y="112" width="192" height="8"/>
+          <rect class="s-ink" x="36" y="120" width="6" height="22"/>
+          <rect class="s-ink" x="198" y="120" width="6" height="22"/>
+          <circle class="s-warn" cx="52" cy="103" r="9"/>
+          <circle class="s-warn" cx="70" cy="103" r="9"/>
+          <circle class="s-warn" cx="88" cy="103" r="9"/>
+          <circle class="s-sig" cx="112" cy="103" r="9"/>
+          <circle class="s-sig" cx="130" cy="103" r="9"/>
+          <ellipse class="s-acc" cx="158" cy="104" rx="12" ry="8"/>
+          <ellipse class="s-acc" cx="178" cy="104" rx="12" ry="8"/>
+          <ellipse class="s-acc" cx="198" cy="104" rx="10" ry="8"/>
+        </svg>
+        <figcaption>Market traders</figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 240 160" role="img" aria-label="Illustration of a bakery with a sign, loaves and buns on shelves and a counter">
+          <rect class="s-bg" width="240" height="160"/>
+          <rect class="s-acc" x="70" y="12" width="100" height="26" rx="4"/>
+          <text class="il-text" x="120" y="30" text-anchor="middle">BAKERY</text>
+          <rect class="s-ink" x="24" y="62" width="192" height="6"/>
+          <rect class="s-ink" x="24" y="100" width="192" height="6"/>
+          <rect class="s-ink" x="24" y="62" width="5" height="64"/>
+          <rect class="s-ink" x="211" y="62" width="5" height="64"/>
+          <ellipse class="s-warn" cx="56" cy="55" rx="18" ry="8"/>
+          <ellipse class="s-warn" cx="96" cy="55" rx="18" ry="8"/>
+          <ellipse class="s-warn" cx="136" cy="55" rx="18" ry="8"/>
+          <ellipse class="s-warn" cx="176" cy="55" rx="18" ry="8"/>
+          <circle class="s-sig" cx="52" cy="92" r="9"/>
+          <circle class="s-sig" cx="76" cy="92" r="9"/>
+          <circle class="s-sig" cx="100" cy="92" r="9"/>
+          <circle class="s-sig" cx="124" cy="92" r="9"/>
+          <circle class="s-sig" cx="148" cy="92" r="9"/>
+          <circle class="s-sig" cx="172" cy="92" r="9"/>
+          <rect class="s-ink" x="10" y="126" width="220" height="34"/>
+        </svg>
+        <figcaption>Bakeries and food</figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 240 160" role="img" aria-label="Illustration of a garage sign above a car with its wheels on the ground">
+          <rect class="s-bg" width="240" height="160"/>
+          <rect class="s-floor" x="0" y="130" width="240" height="30"/>
+          <rect class="s-ink" x="140" y="14" width="86" height="26" rx="4"/>
+          <text class="il-text il-garage" x="183" y="32" text-anchor="middle">GARAGE</text>
+          <path class="s-acc" d="M26 114 L38 90 Q46 72 70 72 H128 Q148 72 158 92 L196 98 Q214 100 214 114 Z"/>
+          <path class="s-sur" d="M50 90 Q54 79 70 79 H92 V90 Z M100 79 H126 Q138 79 146 90 H100 Z"/>
+          <circle class="s-ink" cx="68" cy="114" r="16"/>
+          <circle class="s-ink" cx="172" cy="114" r="16"/>
+          <circle class="s-sur" cx="68" cy="114" r="6"/>
+          <circle class="s-sur" cx="172" cy="114" r="6"/>
+        </svg>
+        <figcaption>Auto workshops</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="hub">
+    <div class="sec-head">
+      <p class="label">Tax awareness hub</p>
+      <h2>The taxes an SME meets, in plain words</h2>
+      <p class="lede">Based on the Nigeria Tax Act 2025 and the Nigeria Tax Administration Act 2025, in force since 1 January 2026. The Nigeria Revenue Service (NRS) replaced FIRS.</p>
+    </div>
+    <div class="cards">
+      <article class="tax-card">
+        <header><h3>Company Income Tax</h3><span class="rate">0% or 30%</span></header>
+        <dl>
+          <dt>Who</dt><dd>Registered limited companies.</dd>
+          <dt>Rule</dt><dd>0% for small companies (turnover up to ₦100m and fixed assets below ₦250m, not a professional services firm). 30% for all others.</dd>
+          <dt>When</dt><dd>Annual return within 6 months of your financial year-end.</dd>
+        </dl>
+      </article>
+      <article class="tax-card">
+        <header><h3>Development Levy</h3><span class="rate">4%</span></header>
+        <dl>
+          <dt>Who</dt><dd>Companies above the small company limits.</dd>
+          <dt>Rule</dt><dd>One levy on assessable profits that replaces several older charges. Small companies are exempt.</dd>
+          <dt>When</dt><dd>With your annual return.</dd>
+        </dl>
+      </article>
+      <article class="tax-card">
+        <header><h3>Value Added Tax</h3><span class="rate">7.5%</span></header>
+        <dl>
+          <dt>Who</dt><dd>Businesses selling taxable goods and services.</dd>
+          <dt>Rule</dt><dd>Small businesses are relieved from registering, charging and filing VAT unless they opt in by written notice.</dd>
+          <dt>When</dt><dd>Monthly, by the 21st of the following month.</dd>
+        </dl>
+      </article>
+      <article class="tax-card">
+        <header><h3>PAYE</h3><span class="rate">Per employee</span></header>
+        <dl>
+          <dt>Who</dt><dd>Any employer with staff.</dd>
+          <dt>Rule</dt><dd>You deduct income tax from salaries and pay it over. Missing the due date makes you liable for the tax, a penalty and interest.</dd>
+          <dt>When</dt><dd>By the 21st of the following month. Your state tax office may set its own schedule, so confirm with it.</dd>
+        </dl>
+      </article>
+      <article class="tax-card">
+        <header><h3>Withholding Tax</h3><span class="rate">Varies</span></header>
+        <dl>
+          <dt>Who</dt><dd>Businesses that pay suppliers and contractors.</dd>
+          <dt>Rule</dt><dd>You hold back a share of certain payments and pass it to the tax authority.</dd>
+          <dt>When</dt><dd>By the 21st of the following month.</dd>
+        </dl>
+      </article>
+      <article class="tax-card">
+        <header><h3>Personal Income Tax</h3><span class="rate">0% to 25%</span></header>
+        <dl>
+          <dt>Who</dt><dd>Sole traders and registered business names.</dd>
+          <dt>Rule</dt><dd>The first ₦800,000 of annual income is tax-free. Higher bands rise to 25% above ₦50m.</dd>
+          <dt>When</dt><dd>Annual self-assessment return.</dd>
+        </dl>
+      </article>
+    </div>
+
+    <h3 style="margin-top:40px">What a missed filing costs</h3>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Default</th><th>Penalty</th></tr></thead>
+        <tbody>
+          <tr><td>Failure to file a return, or filing an incorrect one</td><td class="amount">₦100,000 in the first month, then ₦50,000 each further month</td></tr>
+          <tr><td>Failure to register for tax</td><td class="amount">₦50,000 in the first month, then ₦25,000 each further month</td></tr>
+          <tr><td>Tax withheld or deducted but not paid by the 21st</td><td class="amount">The tax itself, a 10% per annum penalty and interest</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Amounts are as reported by Nigerian law firms and business press for the 2025 Acts. Sources differ on some thresholds, so confirm current figures with the NRS or your state tax office.</p>
+  </section>
+
+  <section id="checker">
+    <div class="sec-head">
+      <p class="label">Compliance checker</p>
+      <h2>What does my business have to do?</h2>
+      <p class="lede">Answer five questions. The result updates as you type.</p>
+    </div>
+    <div class="checker">
+      <form class="form" id="check-form" autocomplete="off">
+        <div class="field">
+          <label for="biz">How is your business registered?</label>
+          <select id="biz">
+            <option value="company">Limited company (CAC)</option>
+            <option value="name">Business name or sole trader</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="turnover">Yearly turnover</label>
+          <div class="money"><span>₦</span><input type="number" id="turnover" min="0" step="1" value="45" inputmode="decimal"><span>million</span></div>
+          <small>Total sales before costs, over 12 months.</small>
+        </div>
+        <div class="field">
+          <label for="assets">Total fixed assets</label>
+          <div class="money"><span>₦</span><input type="number" id="assets" min="0" step="1" value="20" inputmode="decimal"><span>million</span></div>
+          <small>Land, buildings, vehicles, equipment.</small>
+        </div>
+        <div class="field">
+          <label for="prof">Do you sell professional services?</label>
+          <select id="prof">
+            <option value="no">No</option>
+            <option value="yes">Yes (law, accounting, consulting and similar)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="staff">Do you employ staff?</label>
+          <select id="staff">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </form>
+      <div class="result" id="result" aria-live="polite"></div>
+    </div>
+    <p class="note">This tool gives general guidance, not tax advice. Confirm your position with the Nigeria Revenue Service or your state internal revenue service.</p>
+  </section>
+
+  <section id="calendar">
+    <div class="sec-head">
+      <p class="label">Deadline calendar</p>
+      <h2>Never find out about a due date after it passes</h2>
+    </div>
+    <div class="cal">
+      <div class="next" id="next-box">
+        <p class="label">Next monthly deadline</p>
+        <p class="big" id="next-date">21 Nov 2026</p>
+        <p id="next-note">VAT, PAYE and withholding tax for October</p>
+      </div>
+      <ul class="sched">
+        <li><span class="when">21st</span><span>Monthly: VAT return, withholding tax and PAYE remittance for the month before.</span></li>
+        <li><span class="when">6 months</span><span>After year-end: annual company income tax return, including a nil return for exempt small companies.</span></li>
+        <li><span class="when">Any time</span><span>Register for a TIN before you trade. Late registration is fined every month.</span></li>
+      </ul>
+    </div>
+    <div class="annual">
+      <div class="field" style="max-width:320px">
+        <label for="ye">My financial year ends in</label>
+        <select id="ye"></select>
+      </div>
+      <p class="annual-out" id="annual-out"></p>
+    </div>
+  </section>
+
+  <section id="resources">
+    <div class="sec-head">
+      <p class="label">Resources and FAQ</p>
+      <h2>A starter checklist and straight answers</h2>
+    </div>
+    <div class="res">
+      <div class="panel">
+        <h3>Compliance checklist</h3>
+        <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+        <p class="label" id="progress">0 of 7 done</p>
+        <ul class="check" id="check"></ul>
+      </div>
+      <div>
+        <details open>
+          <summary>If my tax is 0%, do I still have to file?</summary>
+          <p>Yes. A small company still needs a TIN and must file its annual return. Your records are the proof that you qualify.</p>
+        </details>
+        <details>
+          <summary>What counts as a small company?</summary>
+          <p>Turnover of ₦100 million or less, fixed assets below ₦250 million, and not a professional services firm. Both limits must be met together.</p>
+        </details>
+        <details>
+          <summary>What happens if I grow past the limit?</summary>
+          <p>The 0% rate and the VAT relief stop applying. Company income tax moves to 30%, the 4% Development Levy applies, and monthly VAT returns begin. Track turnover every month, not at year-end.</p>
+        </details>
+        <details>
+          <summary>I run a business name, not a company. Does the 0% rate apply?</summary>
+          <p>No. Business names and sole traders are taxed as individuals under personal income tax, where the first ₦800,000 of income is tax-free.</p>
+        </details>
+        <details>
+          <summary>Where do I file?</summary>
+          <p>Federal taxes such as company income tax and VAT go to the Nigeria Revenue Service. PAYE and personal income tax usually go to your state internal revenue service.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="sec-head">
+      <p class="label">About and contact</p>
+      <h2>Built to close the awareness gap</h2>
+    </div>
+    <div class="about">
+      <div>
+        <h3>Our model</h3>
+        <p>Compliance rises when people understand the rules, can see what applies to them, and are reminded before a deadline. Bridge Tax Connect puts those three steps in one place for small businesses.</p>
+        <p class="lede" style="font-size:0.95rem">Awareness first, then voluntary compliance.</p>
+      </div>
+      <div>
+        <h3>Contact</h3>
+        <dl class="contact">
+          <dt>Team</dt><dd>BRIDGE Tax Initiative</dd>
+          <dt>Email</dt><dd><span id="mail">lsirs55@gmail.com</span> <button type="button" class="copy" id="copy-mail">Copy</button></dd>
+          <dt>Location</dt><dd>Lion State</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Information current as of 3 November 2026 and drawn from published summaries of the Nigeria Tax Act 2025 and the Nigeria Tax Administration Act 2025. Bridge Tax Connect is an awareness tool and does not replace advice from a licensed tax professional or the tax authority.
+  </footer>
+</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ---------- Compliance checker ---------- */
+  function row(tag, cls, text) {
+    return '<li><span class="tag ' + cls + '">' + tag + '</span><span>' + text + '</span></li>';
+  }
+  function check() {
+    var biz = $('biz').value;
+    var t = parseFloat($('turnover').value);
+    var a = parseFloat($('assets').value);
+    if (isNaN(t) || t < 0) t = 0;
+    if (isNaN(a) || a < 0) a = 0;
+    var prof = $('prof').value === 'yes';
+    var staff = $('staff').value === 'yes';
+    var inLimits = t <= 100 && a < 250;
+    var items = [];
+    var pill, head, alert = false, watch = '';
+
+    if (biz === 'company') {
+      var small = inLimits && !prof;
+      if (small) {
+        pill = 'Small company';
+        head = 'You qualify for the 0% rate';
+        items.push(row('Pay 0%', 'free', 'Company income tax is 0% on your profits and gains. The 4% Development Levy does not apply.'));
+        items.push(row('VAT relief', 'free', 'You do not have to register for, charge or file VAT. You can opt in by written notice.'));
+        items.push(row('Must do', 'must', 'Get a TIN and file your annual return, even if you owe nothing.'));
+        items.push(row('Must do', 'must', 'Keep sales and expense records. They prove you qualify.'));
+        if (t >= 80) watch = 'Your turnover is within 20% of the ₦100m limit. Track it every month so you know before you cross it.';
+      } else {
+        alert = true;
+        pill = 'Standard company';
+        head = 'The 0% small company rate does not apply';
+        var why = prof
+          ? 'Professional services firms are excluded from small company status, whatever their size.'
+          : (t > 100 ? 'Your turnover is above ₦100 million.' : 'Your fixed assets are ₦250 million or more.');
+        items.push(row('Why', 'must', why));
+        items.push(row('Pay', 'must', 'Company income tax at 30% and the 4% Development Levy on assessable profits.'));
+        items.push(row('Monthly', 'must', 'Register for VAT, charge 7.5% and file a return by the 21st of the following month.'));
+        items.push(row('Yearly', 'must', 'File your annual return within 6 months of your financial year-end.'));
+      }
+    } else {
+      pill = 'Individual';
+      head = 'You are taxed as an individual';
+      items.push(row('Pay', 'free', 'Personal income tax. The first ₦800,000 of annual income is tax-free and higher bands apply above it.'));
+      if (inLimits && !prof) {
+        items.push(row('VAT relief', 'free', 'As a small business you do not have to register for or file VAT unless you opt in.'));
+      } else {
+        alert = true;
+        items.push(row('Monthly', 'must', 'Register for VAT, charge 7.5% and file by the 21st of the following month.'));
+      }
+      items.push(row('Must do', 'must', 'Get a TIN and file your annual self-assessment return.'));
+      items.push(row('Must do', 'must', 'Keep records of sales and expenses.'));
+    }
+    if (staff) {
+      items.push(row('Employer', 'must', 'Deduct PAYE from salaries and pay it over on time, by the 21st or on your state office\'s schedule.'));
+    }
+    var res = $('result');
+    res.className = 'result' + (alert ? ' alert' : '');
+    res.innerHTML = '<span class="pill">' + pill + '</span><h3>' + head + '</h3>' +
+      '<p class="sample" id="sample-note">Showing a sample business. Change the answers to see yours.</p>' +
+      '<ul class="obl">' + items.join('') + '</ul>' +
+      (watch ? '<p class="watch">' + watch + '</p>' : '');
+    if (touched) { var s = $('sample-note'); if (s) s.hidden = true; }
+  }
+  var touched = false;
+  ['biz', 'turnover', 'assets', 'prof', 'staff'].forEach(function (id) {
+    $(id).addEventListener('input', function () { touched = true; check(); });
+    $(id).addEventListener('change', function () { touched = true; check(); });
+  });
+  $('check-form').addEventListener('submit', function (e) { e.preventDefault(); });
+  check();
+
+  /* ---------- Deadline calendar ---------- */
+  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var mshort = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var today = new Date();
+  var d0 = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+  var due = new Date(d0.getFullYear(), d0.getMonth(), 21);
+  if (d0 > due) due = new Date(d0.getFullYear(), d0.getMonth() + 1, 21);
+  var days = Math.round((due - d0) / 86400000);
+  var covers = months[(due.getMonth() + 11) % 12];
+  $('next-date').textContent = due.getDate() + ' ' + mshort[due.getMonth()] + ' ' + due.getFullYear();
+  $('next-note').textContent = (days === 0 ? 'Due today' : days + (days === 1 ? ' day' : ' days') + ' left') +
+    '. VAT, PAYE and withholding tax for ' + covers + '.';
+
+  var ye = $('ye');
+  months.forEach(function (m, i) {
+    var o = document.createElement('option');
+    o.value = i; o.textContent = m;
+    if (i === 11) o.selected = true;
+    ye.appendChild(o);
+  });
+  function annual() {
+    var m = parseInt(ye.value, 10);
+    var y = d0.getFullYear() - 1, dueA, endA;
+    for (var k = 0; k < 4; k++) {
+      dueA = new Date(y, m + 7, 0);
+      endA = new Date(y, m + 1, 0);
+      if (dueA >= d0) break;
+      y++;
+    }
+    $('annual-out').textContent = 'Annual return for the year ending ' + endA.getDate() + ' ' + months[endA.getMonth()] + ' ' + endA.getFullYear() +
+      ' is due by ' + dueA.getDate() + ' ' + months[dueA.getMonth()] + ' ' + dueA.getFullYear() + '.';
+  }
+  ye.addEventListener('change', annual);
+  annual();
+
+  /* ---------- Copy email ---------- */
+  $('copy-mail').addEventListener('click', function () {
+    var btn = this, el = $('mail');
+    function done(msg) { btn.textContent = msg; setTimeout(function () { btn.textContent = 'Copy'; }, 1800); }
+    function select() {
+      var r = document.createRange(); r.selectNodeContents(el);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      done('Selected');
+    }
+    try {
+      navigator.clipboard.writeText(el.textContent).then(function () { done('Copied'); }, select);
+    } catch (e) { select(); }
+  });
+
+  /* ---------- Checklist ---------- */
+  var list = [
+    'Register your business and get a TIN',
+    'Keep sales and expense records every month',
+    'Track turnover against the ₦100m small company limit',
+    'Decide your VAT position (relief, or monthly returns)',
+    'Remit PAYE and withholding tax on time',
+    'Diarise your annual return date',
+    'File your annual return, even if you owe nothing'
+  ];
+  var box = $('check');
+  list.forEach(function (text, i) {
+    var li = document.createElement('li');
+    li.innerHTML = '<label for="c' + i + '"><input type="checkbox" id="c' + i + '"><span></span></label>';
+    li.querySelector('span').textContent = text;
+    box.appendChild(li);
+  });
+  function progress() {
+    var boxes = box.querySelectorAll('input');
+    var n = 0;
+    boxes.forEach(function (b) { if (b.checked) n++; });
+    $('progress').textContent = n + ' of ' + boxes.length + ' done';
+    $('bar').style.width = (n / boxes.length * 100) + '%';
+  }
+  box.addEventListener('change', progress);
+  progress();
+})();
+</script>
+</body>
+</html>
